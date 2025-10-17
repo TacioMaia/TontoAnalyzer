@@ -14,8 +14,9 @@ void Parser::Start()
             case IF: cout << "IF\n"; break;
             case THEN: cout << "THEN\n"; break;
             case ELSE: cout << "ELSE\n"; break;
-            case ID: cout << "ID: " << scanner.YYText() << "\n"; break;
+            case STRING: cout << "STRING: " << scanner.YYText() << "\n"; break;
             case NUM: cout << "NUM: " << scanner.YYText() << "\n"; break;
+            case NEWTYPE: cout << "NEW TYPE: " << scanner.YYText() << "\n"; break;
             case RELOP: cout << "RELOP: " << scanner.YYText() << "\n";; break;
         }
     }
