@@ -5,6 +5,7 @@
 using std::cout;
 %}
 
+// definições regulares
 %option noyywrap
 delim	[ \t\n]
 brancos {delim}+
