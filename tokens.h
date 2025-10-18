@@ -1,4 +1,4 @@
-// Enumeração de todos os tokens da linguagem TONTO
+// Enumeração dos tokens da linguagem TONTO
 
 enum TokenType{
     // Palavras Reservadas
@@ -17,7 +17,6 @@ enum TokenType{
     T_PHASEMIXIN, T_ROLEMIXIN, T_HISTORICALROLEMIXIN, T_KIND,
     T_COLLECTIVE, T_QUANTITY, T_QUALITY, T_MODE, T_INTRINSICMODE,
     T_EXTRINSICMODE, T_SUBKIND, T_PHASE, T_ROLE, T_HISTORICALROLE,
-
 
     // Esteriotipos de Relação
     T_MATERIAL, T_DERIVATION, T_COMPARATIVE, T_MEDIATION,
