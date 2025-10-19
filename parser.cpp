@@ -6,12 +6,12 @@
 
 using namespace std;
 
-extern int yylineno;
+
 extern int column;
 
 void Parser::Start()
 {
-    initializeTokenNames();  // Preenche o mapa dos nomes
+    // initializeTokenNames();  // Preenche o mapa dos nomes
 
     // enquanto não atingir o fim da entrada
     while ((lookahead = scanner.yylex()) != 0)
@@ -21,9 +21,9 @@ void Parser::Start()
         }
 
         // Armazena o token para a visão analitica. 
-        int tokenLength = static_cast<int>(scanner.YYLeng());                        // column = coluna após o token
-        int startColumn = column - tokenLength;                                      // coluna inicial = column - comprimento do token
-        allTokens.push_back({lookahead, scanner.YYText(), yylineno, startColumn});   
+        int tokenLength = static_cast<int>(scanner.YYLeng());
+        int startColumn = column - tokenLength;
+        allTokens.push_back({lookahead, scanner.YYText(), scanner.lineno(), startColumn});
 
         // trata o token recebido do analisador léxico
         switch(lookahead)
