@@ -21,10 +21,8 @@ void update_column(yyFlexLexer& scanner) {
 
 /* Definições Regulares */
 delim   [ \t\n]
-brancos {delim}+
-newLine [\n]    
-letra_maiuscula [A-Z]
-letra_minuscula [a-z]
+brancos {delim}+   
+letra_maiuscula [A-Z] 
 letras	[A-Za-z] 
 digito	[0-9]
 num	    {digito}+(\.{digito}+)?(E[+-]?{digito}+)?
@@ -46,7 +44,6 @@ newType {letras}+DataType
 /* Regras de Tradução */
 %%
 {brancos}       { update_column(*this); }
-{newLine}       { column = 1; }
 
 "package"       { update_column(*this); return T_PACKAGE; }
 "import"        { update_column(*this); return T_IMPORT; }
@@ -135,10 +132,10 @@ newType {letras}+DataType
 "."             { update_column(*this); return T_DOT; }
 
 
+{newType}       { update_column(*this); return T_NEW_DATA_TYPE; }
 {className}     { update_column(*this); return T_CLASS_NAME; }
 {relationName}  { update_column(*this); return T_RELATION_NAME; }
 {instanceName}  { update_column(*this); return T_INSTANCE_NAME; }
-{newType}       { update_column(*this); return T_NEW_DATA_TYPE; }
 {num}           { update_column(*this); return T_NUMBER; }
 
 
