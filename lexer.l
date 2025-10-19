@@ -14,7 +14,10 @@ void update_column(){
 }
 %}
 
+%option yylineno
 %option noyywrap
+%option c++
+
 
 // Definições Regulares
 delim   [ \t\n]
@@ -109,6 +112,13 @@ newType {letras}+DataType
 "time"      { update_column(); return T_TIME_TYPE; }
 "datetime"  { update_column(); return T_DATETIME_TYPE; }
 
+// Meta Atributos
+"ordered"   { update_column(); return T_ORDERED; }
+"const"     { update_column(); return T_CONST; }
+"derived"   { update_column(); return T_DERIVED; }
+"subsets"   { update_column(); return T_SUBSETS; }
+"redefines" { update_column(); return T_REDEFINES; }
+
 // Símbolos Especiais
 "{"             { update_column(); return T_LBRACE; }
 "}"             { update_column(); return T_RBRACE; }
@@ -131,7 +141,15 @@ newType {letras}+DataType
 {num}           { update_column(); return T_NUMBER; }
 
 //Tratamento de Erro
-.               { std::cout << "Erro na linha " << yylineno << ", coluna " << column << ": Token inválido '" << YYText() << "'\n"; update_column(); return T_INVALID; }
+.               {
+                    // Imprime a mensagem de erro 
+                    cout << "Erro na linha " << yylineno << ", coluna " << column
+                         << ": Token inválido '" << YYText() << "'\n";
+                    // Sugestão de tratamento
+                    cout << "  Sugestão: Verifique se o caractere é permitido pela linguagem TONTO ou se há erro na formação de um nome (ex: classe iniciando com minúscula, violação de convenção de nome, caractere especial inesperado).\n";
+                    update_column(); 
+                    return T_INVALID; 
+                }
 %%
 
 // nenhuma função auxiliar é necessária

@@ -1,72 +1,89 @@
 #include "parser.h"
 #include "tokens.h"
 #include <iostream>
-using std::cout;
+#include <iomanip>
+#include <map>
+
+using namespace std;
+
+extern int yylineno;
+extern int column;
 
 void Parser::Start()
 {
+    initializeTokenNames();  // Preenche o mapa dos nomes
+
     // enquanto não atingir o fim da entrada
     while ((lookahead = scanner.yylex()) != 0)
     {
+        if(lookahead == T_INVALID){
+            continue;
+        }
+
+        // Armazena o token para a visão analitica. 
+        int tokenLength = static_cast<int>(scanner.YYLeng());                        // column = coluna após o token
+        int startColumn = column - tokenLength;                                      // coluna inicial = column - comprimento do token
+        allTokens.push_back({lookahead, scanner.YYText(), yylineno, startColumn});   
+
         // trata o token recebido do analisador léxico
         switch(lookahead)
         {
         
-            case T_PACKAGE: cout << "T_PACKAGE: " << scanner.YYText() << "\n"; break;
-            case T_IMPORT: cout << "T_IMPORT: " << scanner.YYText() << "\n"; break;
-            case T_GENSET: cout << "T_GENSET: " << scanner.YYText() << "\n"; break;
-            case T_DISJOINT: cout << "T_DISJOINT: " << scanner.YYText() << "\n"; break;
-            case T_COMPLETE: cout << "T_COMPLETE: " << scanner.YYText() << "\n"; break;
-            case T_GENERAL: cout << "T_GENERAL: " << scanner.YYText() << "\n"; break;
-            case T_SPECIFICS: cout << "T_SPECIFICS: " << scanner.YYText() << "\n"; break;
-            case T_WHERE: cout << "T_WHERE: " << scanner.YYText() << "\n"; break;
-            case T_FUNCTIONAL_COMPLEXES: cout << "T_FUNCTIONAL_COMPLEXES: " << scanner.YYText() << "\n"; break;
+            case T_PACKAGE: cout << "T_PACKAGE: " << scanner.YYText() << "\n"; reservedWordCount++ ; keywordCount++; break;
+            case T_IMPORT: cout << "T_IMPORT: " << scanner.YYText() << "\n" ; reservedWordCount++ ; keywordCount++; break;
+            case T_GENSET: cout << "T_GENSET: " << scanner.YYText() << "\n" ; reservedWordCount++ ; keywordCount++; break;
+            case T_DISJOINT: cout << "T_DISJOINT: " << scanner.YYText() << "\n" ; reservedWordCount++ ; keywordCount++; break;
+            case T_COMPLETE: cout << "T_COMPLETE: " << scanner.YYText() << "\n" ; reservedWordCount++ ; keywordCount++; break;
+            case T_GENERAL: cout << "T_GENERAL: " << scanner.YYText() << "\n" ; reservedWordCount++ ; keywordCount++; break;
+            case T_SPECIFICS: cout << "T_SPECIFICS: " << scanner.YYText() << "\n" ; reservedWordCount++ ; keywordCount++; break;
+            case T_WHERE: cout << "T_WHERE: " << scanner.YYText() << "\n" << reservedWordCount++ << keywordCount++; break;
+            case T_FUNCTIONAL_COMPLEXES: cout << "T_FUNCTIONAL_COMPLEXES: " << scanner.YYText() << "\n" ; reservedWordCount++ ; keywordCount++; break;
 
-            case T_EVENT: cout << "T_EVENT: " << scanner.YYText() << "\n"; break;
-            case T_SITUATION: cout << "T_SITUATION: " << scanner.YYText() << "\n"; break;
-            case T_PROCESS: cout << "T_PROCESS: " << scanner.YYText() << "\n"; break;
-            case T_CATEGORY: cout << "T_CATEGORY: " << scanner.YYText() << "\n"; break;
-            case T_MIXIN: cout << "T_MIXIN: " << scanner.YYText() << "\n"; break;
-            case T_PHASEMIXIN: cout << "T_PHASEMIXIN: " << scanner.YYText() << "\n"; break;
-            case T_ROLEMIXIN: cout << "T_ROLEMIXIN: " << scanner.YYText() << "\n"; break;
-            case T_HISTORICALROLEMIXIN: cout << "T_HISTORICALROLEMIXIN: " << scanner.YYText() << "\n"; break;
-            case T_KIND: cout << "T_KIND: " << scanner.YYText() << "\n"; break;
-            case T_COLLECTIVE: cout << "T_COLLECTIVE: " << scanner.YYText() << "\n"; break;
-            case T_QUANTITY: cout << "T_QUANTITY: " << scanner.YYText() << "\n"; break;
-            case T_QUALITY: cout << "T_QUALITY: " << scanner.YYText() << "\n"; break;
-            case T_MODE: cout << "T_MODE: " << scanner.YYText() << "\n"; break;
-            case T_INTRINSICMODE: cout << "T_INTRINSICMODE: " << scanner.YYText() << "\n"; break;
-            case T_EXTRINSICMODE: cout << "T_EXTRINSICMODE: " << scanner.YYText() << "\n"; break;
-            case T_SUBKIND: cout << "T_SUBKIND: " << scanner.YYText() << "\n"; break;
-            case T_PHASE: cout << "T_PHASE: " << scanner.YYText() << "\n"; break;
-            case T_ROLE: cout << "T_ROLE: " << scanner.YYText() << "\n"; break;
-            case T_HISTORICALROLE: cout << "T_HISTORICALROLE: " << scanner.YYText() << "\n"; break;
+            case T_EVENT: cout << "T_EVENT: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_SITUATION: cout << "T_SITUATION: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_PROCESS: cout << "T_PROCESS: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_CATEGORY: cout << "T_CATEGORY: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_MIXIN: cout << "T_MIXIN: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_PHASEMIXIN: cout << "T_PHASEMIXIN: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_ROLEMIXIN: cout << "T_ROLEMIXIN: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_HISTORICALROLEMIXIN: cout << "T_HISTORICALROLEMIXIN: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_KIND: cout << "T_KIND: " << scanner.YYText() << "\n" << keywordCount++; break;
+            case T_COLLECTIVE: cout << "T_COLLECTIVE: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_QUANTITY: cout << "T_QUANTITY: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_QUALITY: cout << "T_QUALITY: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_MODE: cout << "T_MODE: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_INTRINSICMODE: cout << "T_INTRINSICMODE: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_EXTRINSICMODE: cout << "T_EXTRINSICMODE: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_SUBKIND: cout << "T_SUBKIND: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_PHASE: cout << "T_PHASE: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_ROLE: cout << "T_ROLE: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_HISTORICALROLE: cout << "T_HISTORICALROLE: " << scanner.YYText() << "\n" ; keywordCount++; break;
 
-            case T_MATERIAL: cout << "T_MATERIAL: " << scanner.YYText() << "\n"; break;
-            case T_DERIVATION: cout << "T_DERIVATION: " << scanner.YYText() << "\n"; break;
-            case T_COMPARATIVE: cout << "T_COMPARATIVE: " << scanner.YYText() << "\n"; break;
-            case T_MEDIATION: cout << "T_MEDIATION: " << scanner.YYText() << "\n"; break;
-            case T_CHARACTERIZATION: cout << "T_CHARACTERIZATION: " << scanner.YYText() << "\n"; break;
-            case T_SUBCOLLECTIONOF: cout << "T_SUBCOLLECTIONOF: " << scanner.YYText() << "\n"; break;
-            case T_SUBQUALITYOF: cout << "T_SUBQUALITYOF: " << scanner.YYText() << "\n"; break;
-            case T_INSTANTIATION: cout << "T_INSTANTIATION: " << scanner.YYText() << "\n"; break;
-            case T_EXTERNALDEPENDENCE: cout << "T_EXTERNALDEPENDENCE: " << scanner.YYText() << "\n"; break;
-            case T_COMPONENTOF: cout << "T_COMPONENTOF: " << scanner.YYText() << "\n"; break;
-            case T_MEMBEROF: cout << "T_MEMBEROF: " << scanner.YYText() << "\n"; break;
-            case T_TERMINATION: cout << "T_TERMINATION: " << scanner.YYText() << "\n"; break;
-            case T_PARTICIPATIONAL: cout << "T_PARTICIPATIONAL: " << scanner.YYText() << "\n"; break;
-            case T_PARTICIPATION: cout << "T_PARTICIPATION: " << scanner.YYText() << "\n"; break;
-            case T_HISTORICALDEPENDENCE: cout << "T_HISTORICALDEPENDENCE: " << scanner.YYText() << "\n"; break;
-            case T_CREATION: cout << "T_CREATION: " << scanner.YYText() << "\n"; break;
-            case T_MANIFESTATION: cout << "T_MANIFESTATION: " << scanner.YYText() << "\n"; break;
-            case T_BRINGSABOUT: cout << "T_BRINGSABOUT: " << scanner.YYText() << "\n"; break;
-            case T_TRIGGERS: cout << "T_TRIGGERS: " << scanner.YYText() << "\n"; break;
-            case T_COMPOSITION: cout << "T_COMPOSITION: " << scanner.YYText() << "\n"; break;
-            case T_AGGREGATION: cout << "T_AGGREGATION: " << scanner.YYText() << "\n"; break;
-            case T_INHERENCE: cout << "T_INHERENCE: " << scanner.YYText() << "\n"; break;
-            case T_VALUE: cout << "T_VALUE: " << scanner.YYText() << "\n"; break;
-            case T_FORMAL: cout << "T_FORMAL: " << scanner.YYText() << "\n"; break;
-            case T_CONSTITUTION: cout << "T_CONSTITUTION: " << scanner.YYText() << "\n"; break;
+            case T_MATERIAL: cout << "T_MATERIAL: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_DERIVATION: cout << "T_DERIVATION: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_COMPARATIVE: cout << "T_COMPARATIVE: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_MEDIATION: cout << "T_MEDIATION: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_CHARACTERIZATION: cout << "T_CHARACTERIZATION: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_SUBCOLLECTIONOF: cout << "T_SUBCOLLECTIONOF: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_SUBQUALITYOF: cout << "T_SUBQUALITYOF: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_INSTANTIATION: cout << "T_INSTANTIATION: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_EXTERNALDEPENDENCE: cout << "T_EXTERNALDEPENDENCE: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_COMPONENTOF: cout << "T_COMPONENTOF: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_MEMBEROF: cout << "T_MEMBEROF: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_TERMINATION: cout << "T_TERMINATION: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_PARTICIPATIONAL: cout << "T_PARTICIPATIONAL: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_PARTICIPATION: cout << "T_PARTICIPATION: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_HISTORICALDEPENDENCE: cout << "T_HISTORICALDEPENDENCE: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_CREATION: cout << "T_CREATION: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_MANIFESTATION: cout << "T_MANIFESTATION: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_BRINGSABOUT: cout << "T_BRINGSABOUT: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_TRIGGERS: cout << "T_TRIGGERS: " << scanner.YYText() << "\n" << keywordCount++; break;
+            case T_COMPOSITION: cout << "T_COMPOSITION: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_AGGREGATION: cout << "T_AGGREGATION: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_INHERENCE: cout << "T_INHERENCE: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_VALUE: cout << "T_VALUE: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_FORMAL: cout << "T_FORMAL: " << scanner.YYText() << "\n" ; keywordCount++; break;
+            case T_CONSTITUTION: cout << "T_CONSTITUTION: " << scanner.YYText() << "\n" ; keywordCount++; break;
 
             case T_NUMBER_TYPE: cout << "T_NUMBER_TYPE: " << scanner.YYText() << "\n"; break;
             case T_STRING_TYPE: cout << "T_STRING_TYPE: " << scanner.YYText() << "\n"; break;
@@ -75,11 +92,11 @@ void Parser::Start()
             case T_TIME_TYPE: cout << "T_TIME_TYPE: " << scanner.YYText() << "\n"; break;
             case T_DATETIME_TYPE: cout << "T_DATETIME_TYPE: " << scanner.YYText() << "\n"; break;
 
-            case T_ORDERED: cout << "T_ORDERED: " << scanner.YYText() << "\n"; break;
-            case T_CONST: cout << "T_CONST: " << scanner.YYText() << "\n"; break;
-            case T_DERIVED: cout << "T_DERIVED: " << scanner.YYText() << "\n"; break;
-            case T_SUBSETS: cout << "T_SUBSETS: " << scanner.YYText() << "\n"; break;
-            case T_REDEFINES: cout << "T_REDEFINES: " << scanner.YYText() << "\n"; break;
+            case T_ORDERED: cout << "T_ORDERED: " << scanner.YYText() << "\n" ; keywordCount++ ; metaAttributeCount++; break;
+            case T_CONST: cout << "T_CONST: " << scanner.YYText() << "\n" ; keywordCount++ ; metaAttributeCount++; break;
+            case T_DERIVED: cout << "T_DERIVED: " << scanner.YYText() << "\n" ; keywordCount++ ; metaAttributeCount++; break;
+            case T_SUBSETS: cout << "T_SUBSETS: " << scanner.YYText() << "\n" ; keywordCount++ ; metaAttributeCount++; break;
+            case T_REDEFINES: cout << "T_REDEFINES: " << scanner.YYText() << "\n" ; keywordCount++ ; metaAttributeCount++; break;
 
             case T_LBRACE: cout << "T_LBRACE: " << scanner.YYText() << "\n"; break;
             case T_RBRACE: cout << "T_RBRACE: " << scanner.YYText() << "\n"; break;
@@ -95,9 +112,9 @@ void Parser::Start()
             case T_AT: cout << "T_AT: " << scanner.YYText() << "\n"; break;
             case T_DOT: cout << "T_DOT: " << scanner.YYText() << "\n"; break;
 
-            case T_CLASS_NAME: cout << "T_CLASS_NAME: " << scanner.YYText() << "\n"; break;
-            case T_RELATION_NAME: cout << "T_RELATION_NAME: " << scanner.YYText() << "\n"; break;
-            case T_INSTANCE_NAME: cout << "T_INSTANCE_NAME: " << scanner.YYText() << "\n"; break;
+            case T_CLASS_NAME: cout << "T_CLASS_NAME: " << scanner.YYText() << "\n" ; classCount++; break;
+            case T_RELATION_NAME: cout << "T_RELATION_NAME: " << scanner.YYText() << "\n" ; relationCount++; break;
+            case T_INSTANCE_NAME: cout << "T_INSTANCE_NAME: " << scanner.YYText() << "\n" ; instanceCount++; break;
             case T_NEW_DATA_TYPE: cout << "T_NEW_DATA_TYPE: " << scanner.YYText() << "\n"; break;
             case T_NUMBER: cout << "T_NUMBER: " << scanner.YYText() << "\n"; break;
             case T_STRING: cout << "T_STRING: " << scanner.YYText() << "\n"; break;
@@ -106,4 +123,49 @@ void Parser::Start()
             case T_EOF: cout << "T_EOF: " << scanner.YYText() << "\n"; break;
         }
     }
+    printAnalyticalView();
+    printSynthesisTable();  
+}
+
+// Imprime a visão analítica de todos os tokens válidos encontrados
+void Parser::printAnalyticalView() {
+    cout << "\n--- Visão Analítica de Tokens ---\n"; 
+    cout << left 
+              << setw(8) << "LINHA" 
+              << setw(8) << "COLUNA" 
+              << setw(25) << "TIPO" 
+              << "TEXTO\n";
+    cout << "--------------------------------------------------------------\n"; 
+
+    for (const auto& token : allTokens) {
+        string typeName = "DESCONHECIDO";
+        // Usa o mapa para obter o nome do tipo do token (se existir)
+        auto it = tokenNames.find(token.type);
+        if (it != tokenNames.end()) {
+            typeName = it->second;
+        } else {
+             typeName = "TIPO_" + to_string(token.type); 
+        }
+
+        cout << left 
+                  << setw(8) << token.line 
+                  << setw(8) << token.column_start 
+                  << setw(25) << typeName 
+                  << token.text << "\n";
+    }
+     cout << "--------------------------------------------------------------\n"; 
+}
+
+// Imprime a tabela de síntese com as contagens
+void Parser::printSynthesisTable() {
+    cout << "\n--- Tabela de Síntese ---\n"; 
+    cout << left << setw(25) << "Elemento" << "Quantidade\n";
+    cout << "---------------------------------------\n";
+    cout << left << setw(25) << "Classes" << classCount << "\n";
+    cout << left << setw(25) << "Relações" << relationCount << "\n";
+    cout << left << setw(25) << "Palavras-chave (Total)" << keywordCount << "\n"; 
+    cout << left << setw(25) << "Indivíduos (Instâncias)" << instanceCount << "\n";
+    cout << left << setw(25) << "Palavras Reservadas" << reservedWordCount << "\n";
+    cout << left << setw(25) << "Meta-atributos" << metaAttributeCount << "\n"; 
+    cout << "---------------------------------------\n"; 
 }

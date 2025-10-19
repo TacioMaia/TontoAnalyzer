@@ -5,5 +5,4 @@ int main()
 {
 	Parser parser;
 	parser.Start();
-	cout << "oi";
 }

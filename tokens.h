@@ -31,7 +31,7 @@ enum TokenType{
     T_NUMBER_TYPE, T_STRING_TYPE, T_BOOLEAN_TYPE, T_DATE_TYPE,
     T_TIME_TYPE, T_DATETIME_TYPE,
 
-    // Meta-atributos
+    // Meta Atributos
     T_ORDERED, T_CONST, T_DERIVED, T_SUBSETS, T_REDEFINES,
 
     // Símbolos Especiais
