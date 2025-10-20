@@ -36,7 +36,7 @@ void Parser::Start()
             case T_COMPLETE:  reservedWordCount++ ; keywordCount++; break;
             case T_GENERAL:  reservedWordCount++ ; keywordCount++; break;
             case T_SPECIFICS:  reservedWordCount++ ; keywordCount++; break;
-            case T_WHERE:  reservedWordCount++ << keywordCount++; break;
+            case T_WHERE:  reservedWordCount++ ; keywordCount++; break;
             case T_FUNCTIONAL_COMPLEXES:  reservedWordCount++ ; keywordCount++; break;
 
             case T_EVENT:  keywordCount++; break;
