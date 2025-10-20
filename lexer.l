@@ -20,8 +20,6 @@ void update_column(yyFlexLexer& scanner) {
 
 
 /* Definições Regulares */
-delim   [ \t\n]
-brancos {delim}+   
 letra_maiuscula [A-Z] 
 letras	[A-Za-z] 
 digito	[0-9]
@@ -43,7 +41,8 @@ newType {letras}+DataType
 
 /* Regras de Tradução */
 %%
-{brancos}       { update_column(*this); }
+[ \t]+          { update_column(*this);}
+\n              { column = 1;}
 
 "package"       { update_column(*this); return T_PACKAGE; }
 "import"        { update_column(*this); return T_IMPORT; }
@@ -53,6 +52,7 @@ newType {letras}+DataType
 "general"       { update_column(*this); return T_GENERAL; }
 "specifics"     { update_column(*this); return T_SPECIFICS; }
 "where"         { update_column(*this); return T_WHERE; }
+"functional-complexes" {update_column(*this); return T_FUNCTIONAL_COMPLEXES; }
 
 
 "event"               { update_column(*this); return T_EVENT; }
