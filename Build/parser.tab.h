@@ -62,79 +62,87 @@ extern int yydebug;
     T_GENERAL = 263,               /* T_GENERAL  */
     T_SPECIFICS = 264,             /* T_SPECIFICS  */
     T_WHERE = 265,                 /* T_WHERE  */
-    T_FUNCTIONAL_COMPLEXES = 266,  /* T_FUNCTIONAL_COMPLEXES  */
+    T_OF = 266,                    /* T_OF  */
     T_DATATYPE = 267,              /* T_DATATYPE  */
     T_ENUM = 268,                  /* T_ENUM  */
     T_RELATION = 269,              /* T_RELATION  */
-    T_KIND = 270,                  /* T_KIND  */
-    T_SUBKIND = 271,               /* T_SUBKIND  */
-    T_ROLE = 272,                  /* T_ROLE  */
-    T_PHASE = 273,                 /* T_PHASE  */
-    T_CATEGORY = 274,              /* T_CATEGORY  */
-    T_MIXIN = 275,                 /* T_MIXIN  */
-    T_ROLEMIXIN = 276,             /* T_ROLEMIXIN  */
-    T_PHASEMIXIN = 277,            /* T_PHASEMIXIN  */
-    T_HISTORICALROLE = 278,        /* T_HISTORICALROLE  */
-    T_HISTORICALROLEMIXIN = 279,   /* T_HISTORICALROLEMIXIN  */
-    T_COLLECTIVE = 280,            /* T_COLLECTIVE  */
-    T_QUANTITY = 281,              /* T_QUANTITY  */
-    T_QUALITY = 282,               /* T_QUALITY  */
-    T_MODE = 283,                  /* T_MODE  */
-    T_INTRINSICMODE = 284,         /* T_INTRINSICMODE  */
-    T_EXTRINSICMODE = 285,         /* T_EXTRINSICMODE  */
-    T_EVENT = 286,                 /* T_EVENT  */
-    T_SITUATION = 287,             /* T_SITUATION  */
-    T_PROCESS = 288,               /* T_PROCESS  */
-    T_MATERIAL = 289,              /* T_MATERIAL  */
-    T_DERIVATION = 290,            /* T_DERIVATION  */
-    T_COMPARATIVE = 291,           /* T_COMPARATIVE  */
-    T_MEDIATION = 292,             /* T_MEDIATION  */
-    T_CHARACTERIZATION = 293,      /* T_CHARACTERIZATION  */
-    T_SUBCOLLECTIONOF = 294,       /* T_SUBCOLLECTIONOF  */
-    T_SUBQUALITYOF = 295,          /* T_SUBQUALITYOF  */
-    T_INSTANTIATION = 296,         /* T_INSTANTIATION  */
-    T_EXTERNALDEPENDENCE = 297,    /* T_EXTERNALDEPENDENCE  */
-    T_COMPONENTOF = 298,           /* T_COMPONENTOF  */
-    T_MEMBEROF = 299,              /* T_MEMBEROF  */
-    T_TERMINATION = 300,           /* T_TERMINATION  */
-    T_PARTICIPATIONAL = 301,       /* T_PARTICIPATIONAL  */
-    T_PARTICIPATION = 302,         /* T_PARTICIPATION  */
-    T_HISTORICALDEPENDENCE = 303,  /* T_HISTORICALDEPENDENCE  */
-    T_CREATION = 304,              /* T_CREATION  */
-    T_MANIFESTATION = 305,         /* T_MANIFESTATION  */
-    T_BRINGSABOUT = 306,           /* T_BRINGSABOUT  */
-    T_TRIGGERS = 307,              /* T_TRIGGERS  */
-    T_COMPOSITION = 308,           /* T_COMPOSITION  */
-    T_AGGREGATION = 309,           /* T_AGGREGATION  */
-    T_INHERENCE = 310,             /* T_INHERENCE  */
-    T_VALUE = 311,                 /* T_VALUE  */
-    T_FORMAL = 312,                /* T_FORMAL  */
-    T_CONSTITUTION = 313,          /* T_CONSTITUTION  */
-    T_NUMBER_TYPE = 314,           /* T_NUMBER_TYPE  */
-    T_STRING_TYPE = 315,           /* T_STRING_TYPE  */
-    T_BOOLEAN_TYPE = 316,          /* T_BOOLEAN_TYPE  */
-    T_DATE_TYPE = 317,             /* T_DATE_TYPE  */
-    T_TIME_TYPE = 318,             /* T_TIME_TYPE  */
-    T_DATETIME_TYPE = 319,         /* T_DATETIME_TYPE  */
-    T_LBRACE = 320,                /* T_LBRACE  */
-    T_RBRACE = 321,                /* T_RBRACE  */
-    T_LPAREN = 322,                /* T_LPAREN  */
-    T_RPAREN = 323,                /* T_RPAREN  */
-    T_LBRACK = 324,                /* T_LBRACK  */
-    T_RBRACK = 325,                /* T_RBRACK  */
-    T_DOTDOT = 326,                /* T_DOTDOT  */
-    T_DIAMOND_ARROW = 327,         /* T_DIAMOND_ARROW  */
-    T_ARROW_DIAMOND = 328,         /* T_ARROW_DIAMOND  */
-    T_ASTERISK = 329,              /* T_ASTERISK  */
-    T_AT = 330,                    /* T_AT  */
-    T_DOT = 331,                   /* T_DOT  */
-    T_COLON = 332,                 /* T_COLON  */
-    T_COMMA = 333,                 /* T_COMMA  */
-    T_CLASS_NAME = 334,            /* T_CLASS_NAME  */
-    T_RELATION_NAME = 335,         /* T_RELATION_NAME  */
-    T_INSTANCE_NAME = 336,         /* T_INSTANCE_NAME  */
-    T_NEW_DATA_TYPE = 337,         /* T_NEW_DATA_TYPE  */
-    T_NUMBER_LITERAL = 338         /* T_NUMBER_LITERAL  */
+    T_FUNCTIONAL_COMPLEXES = 270,  /* T_FUNCTIONAL_COMPLEXES  */
+    T_RELATORS = 271,              /* T_RELATORS  */
+    T_INTRINSIC_MODES = 272,       /* T_INTRINSIC_MODES  */
+    T_EXTRINSIC_MODES = 273,       /* T_EXTRINSIC_MODES  */
+    T_QUALITIES = 274,             /* T_QUALITIES  */
+    T_MODES = 275,                 /* T_MODES  */
+    T_EVENTS = 276,                /* T_EVENTS  */
+    T_SITUATIONS = 277,            /* T_SITUATIONS  */
+    T_KIND = 278,                  /* T_KIND  */
+    T_SUBKIND = 279,               /* T_SUBKIND  */
+    T_ROLE = 280,                  /* T_ROLE  */
+    T_PHASE = 281,                 /* T_PHASE  */
+    T_CATEGORY = 282,              /* T_CATEGORY  */
+    T_MIXIN = 283,                 /* T_MIXIN  */
+    T_ROLEMIXIN = 284,             /* T_ROLEMIXIN  */
+    T_PHASEMIXIN = 285,            /* T_PHASEMIXIN  */
+    T_HISTORICALROLE = 286,        /* T_HISTORICALROLE  */
+    T_HISTORICALROLEMIXIN = 287,   /* T_HISTORICALROLEMIXIN  */
+    T_COLLECTIVE = 288,            /* T_COLLECTIVE  */
+    T_QUANTITY = 289,              /* T_QUANTITY  */
+    T_QUALITY = 290,               /* T_QUALITY  */
+    T_MODE = 291,                  /* T_MODE  */
+    T_INTRINSICMODE = 292,         /* T_INTRINSICMODE  */
+    T_EXTRINSICMODE = 293,         /* T_EXTRINSICMODE  */
+    T_EVENT = 294,                 /* T_EVENT  */
+    T_SITUATION = 295,             /* T_SITUATION  */
+    T_PROCESS = 296,               /* T_PROCESS  */
+    T_MATERIAL = 297,              /* T_MATERIAL  */
+    T_DERIVATION = 298,            /* T_DERIVATION  */
+    T_COMPARATIVE = 299,           /* T_COMPARATIVE  */
+    T_MEDIATION = 300,             /* T_MEDIATION  */
+    T_CHARACTERIZATION = 301,      /* T_CHARACTERIZATION  */
+    T_SUBCOLLECTIONOF = 302,       /* T_SUBCOLLECTIONOF  */
+    T_SUBQUALITYOF = 303,          /* T_SUBQUALITYOF  */
+    T_INSTANTIATION = 304,         /* T_INSTANTIATION  */
+    T_EXTERNALDEPENDENCE = 305,    /* T_EXTERNALDEPENDENCE  */
+    T_COMPONENTOF = 306,           /* T_COMPONENTOF  */
+    T_MEMBEROF = 307,              /* T_MEMBEROF  */
+    T_TERMINATION = 308,           /* T_TERMINATION  */
+    T_PARTICIPATIONAL = 309,       /* T_PARTICIPATIONAL  */
+    T_PARTICIPATION = 310,         /* T_PARTICIPATION  */
+    T_HISTORICALDEPENDENCE = 311,  /* T_HISTORICALDEPENDENCE  */
+    T_CREATION = 312,              /* T_CREATION  */
+    T_MANIFESTATION = 313,         /* T_MANIFESTATION  */
+    T_BRINGSABOUT = 314,           /* T_BRINGSABOUT  */
+    T_TRIGGERS = 315,              /* T_TRIGGERS  */
+    T_COMPOSITION = 316,           /* T_COMPOSITION  */
+    T_AGGREGATION = 317,           /* T_AGGREGATION  */
+    T_INHERENCE = 318,             /* T_INHERENCE  */
+    T_VALUE = 319,                 /* T_VALUE  */
+    T_FORMAL = 320,                /* T_FORMAL  */
+    T_CONSTITUTION = 321,          /* T_CONSTITUTION  */
+    T_NUMBER_TYPE = 322,           /* T_NUMBER_TYPE  */
+    T_STRING_TYPE = 323,           /* T_STRING_TYPE  */
+    T_BOOLEAN_TYPE = 324,          /* T_BOOLEAN_TYPE  */
+    T_DATE_TYPE = 325,             /* T_DATE_TYPE  */
+    T_TIME_TYPE = 326,             /* T_TIME_TYPE  */
+    T_DATETIME_TYPE = 327,         /* T_DATETIME_TYPE  */
+    T_LBRACE = 328,                /* T_LBRACE  */
+    T_RBRACE = 329,                /* T_RBRACE  */
+    T_LPAREN = 330,                /* T_LPAREN  */
+    T_RPAREN = 331,                /* T_RPAREN  */
+    T_LBRACK = 332,                /* T_LBRACK  */
+    T_RBRACK = 333,                /* T_RBRACK  */
+    T_DOTDOT = 334,                /* T_DOTDOT  */
+    T_DIAMOND_ARROW = 335,         /* T_DIAMOND_ARROW  */
+    T_ARROW_DIAMOND = 336,         /* T_ARROW_DIAMOND  */
+    T_ASTERISK = 337,              /* T_ASTERISK  */
+    T_AT = 338,                    /* T_AT  */
+    T_DOT = 339,                   /* T_DOT  */
+    T_COLON = 340,                 /* T_COLON  */
+    T_COMMA = 341,                 /* T_COMMA  */
+    T_CLASS_NAME = 342,            /* T_CLASS_NAME  */
+    T_RELATION_NAME = 343,         /* T_RELATION_NAME  */
+    T_INSTANCE_NAME = 344,         /* T_INSTANCE_NAME  */
+    T_NEW_DATA_TYPE = 345,         /* T_NEW_DATA_TYPE  */
+    T_NUMBER_LITERAL = 346         /* T_NUMBER_LITERAL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -143,12 +151,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 38 "parser.y"
+#line 33 "parser.y"
 
-    char* sval; /* Para nomes (strings) */
-    int ival;   /* Para números (inteiros) */
+    char* sval; 
+    int ival;   
 
-#line 152 "/home/tacioplays/Compiladores/TontoAnalyzer/Build/parser.tab.h"
+#line 160 "/home/tacioplays/Compiladores/TontoAnalyzer/Build/parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

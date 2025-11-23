@@ -1,8 +1,8 @@
 %{
 #include <iostream>
 #include <string>
-#include <cstring> // Para strdup
-#include "parser.tab.h" // Tokens gerados pelo Bison
+#include <cstring> 
+#include "parser.tab.h" 
 
 using namespace std;
 %}
@@ -10,27 +10,23 @@ using namespace std;
 %option yylineno
 %option noyywrap
 
-/* --- Definições Regulares --- */
+/* Definições */
 letra_maiuscula [A-Z] 
 letras      [A-Za-z] 
 digito      [0-9]
 num         {digito}+
 
-/* Identificadores */
-/* Classe começa com maiúscula */
+/* Identificadores */ 
 className {letra_maiuscula}({letras}|_|{digito})*{letras}?
-
-/* RelationName começa com minúscula */
 relationName [a-z]([A-Za-z0-9_])*
-
-/* Novos Tipos terminam com DataType */
 newType {letra_maiuscula}({letras}|{digito})*DataType
 
 %%
 
-[ \t\r]+        ; /* Ignora espaços em branco */
-\n              ; /* O yylineno conta as linhas automaticamente */
-"//".* ; /* Ignora comentários de uma linha */
+[ \t\r]+        ; 
+\n              ; 
+"//".* ; 
+
 
 "package"       { return T_PACKAGE; }
 "import"        { return T_IMPORT; }
@@ -40,7 +36,17 @@ newType {letra_maiuscula}({letras}|{digito})*DataType
 "general"       { return T_GENERAL; }
 "specifics"     { return T_SPECIFICS; }
 "where"         { return T_WHERE; }
+"of"            { return T_OF; } 
+
+
 "functional-complexes" { return T_FUNCTIONAL_COMPLEXES; }
+"relators"      { return T_RELATORS; }
+"intrinsic-modes" { return T_INTRINSIC_MODES; }
+"extrinsic-modes" { return T_EXTRINSIC_MODES; }
+"qualities"     { return T_QUALITIES; }
+"modes"         { return T_MODES; }
+"events"        { return T_EVENTS; }
+"situations"    { return T_SITUATIONS; }
 
 "datatype"      { return T_DATATYPE; }
 "enum"          { return T_ENUM; }
@@ -63,6 +69,7 @@ newType {letra_maiuscula}({letras}|{digito})*DataType
 "event"         { return T_EVENT; }
 "situation"     { return T_SITUATION; }
 "process"       { return T_PROCESS; }
+"historicalRole" { return T_HISTORICALROLE; }
 
 
 "material"      { return T_MATERIAL; }
@@ -72,6 +79,17 @@ newType {letra_maiuscula}({letras}|{digito})*DataType
 "derivation"    { return T_DERIVATION; }
 "characterization" { return T_CHARACTERIZATION; }
 "formal"        { return T_FORMAL; }
+"bringsAbout"   { return T_BRINGSABOUT; }
+"triggers"      { return T_TRIGGERS; }
+"participation" { return T_PARTICIPATION; }
+"participational" { return T_PARTICIPATIONAL; }
+"historicalDependence" { return T_HISTORICALDEPENDENCE; }
+"creation"      { return T_CREATION; }
+"manifestation" { return T_MANIFESTATION; }
+"termination"   { return T_TERMINATION; }
+"instantiation" { return T_INSTANTIATION; }
+"subCollectionOf" { return T_SUBCOLLECTIONOF; }
+"subQuantityOf" { return T_SUBQUALITYOF; }
 
 
 "number"        { return T_NUMBER_TYPE; }
@@ -118,7 +136,6 @@ newType {letra_maiuscula}({letras}|{digito})*DataType
 }
 
 .               { 
-    /* Apenas avisa no erro léxico, não para a execução imediatamente */
     cerr << "ERRO LÉXICO: Caractere inválido '" << yytext << "' na linha " << yylineno << endl;
 }
 

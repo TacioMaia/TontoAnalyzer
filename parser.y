@@ -7,72 +7,69 @@
 
 using namespace std;
 
-// Declarações externas
 extern int yylex();
 extern int yylineno;
 extern char* yytext;
 void yyerror(const char *s);
 
-// --- Estruturas para a Tabela de Síntese ---
+// Estruturas para a Tabela de Síntese
 vector<string> packages;
-string current_package = "Global"; // Pacote padrão se nenhum for definido
-map<string, vector<string>> classes_by_package; // Mapa: Pacote -> Lista de Classes
+string current_package = "Global"; 
+map<string, vector<string>> classes_by_package; 
 vector<string> external_relations;
 int count_datatypes = 0;
 int count_enums = 0;
 int count_gensets = 0;
 
-// Função auxiliar para registrar classes
 void register_class(string class_name) {
     classes_by_package[current_package].push_back(class_name);
 }
 
-// Função auxiliar para registrar relações externas
-void register_external_relation(string relation_info) {
-    external_relations.push_back(relation_info);
+void register_external_relation(string relation_name) {
+    external_relations.push_back(relation_name);
 }
-
 %}
 
-/* --- Definição da União (Tipos de dados que os tokens podem carregar) --- */
 %union {
-    char* sval; /* Para nomes (strings) */
-    int ival;   /* Para números (inteiros) */
+    char* sval; 
+    int ival;   
 }
 
-/* --- Tokens (Vindos do Lexer) --- */
-/* Palavras-chave de estrutura */
-%token T_PACKAGE T_IMPORT T_GENSET T_DISJOINT T_COMPLETE T_GENERAL T_SPECIFICS T_WHERE
-%token T_FUNCTIONAL_COMPLEXES T_DATATYPE T_ENUM T_RELATION
+/* Tokens */
+%token T_PACKAGE T_IMPORT T_GENSET T_DISJOINT T_COMPLETE T_GENERAL T_SPECIFICS T_WHERE T_OF
+%token T_DATATYPE T_ENUM T_RELATION
 
-/* Estereótipos de Classe */
+/* Categorias do OF */
+%token T_FUNCTIONAL_COMPLEXES T_RELATORS T_INTRINSIC_MODES T_EXTRINSIC_MODES
+%token T_QUALITIES T_MODES T_EVENTS T_SITUATIONS
+
+/* Estereótipos */
 %token T_KIND T_SUBKIND T_ROLE T_PHASE T_CATEGORY T_MIXIN T_ROLEMIXIN T_PHASEMIXIN 
 %token T_HISTORICALROLE T_HISTORICALROLEMIXIN T_COLLECTIVE T_QUANTITY T_QUALITY 
 %token T_MODE T_INTRINSICMODE T_EXTRINSICMODE 
 %token T_EVENT T_SITUATION T_PROCESS
 
-/* Estereótipos de Relação */
+/* Relações */
 %token T_MATERIAL T_DERIVATION T_COMPARATIVE T_MEDIATION T_CHARACTERIZATION
 %token T_SUBCOLLECTIONOF T_SUBQUALITYOF T_INSTANTIATION T_EXTERNALDEPENDENCE
 %token T_COMPONENTOF T_MEMBEROF T_TERMINATION T_PARTICIPATIONAL T_PARTICIPATION
 %token T_HISTORICALDEPENDENCE T_CREATION T_MANIFESTATION T_BRINGSABOUT T_TRIGGERS
 %token T_COMPOSITION T_AGGREGATION T_INHERENCE T_VALUE T_FORMAL T_CONSTITUTION
 
-/* Tipos Nativos */
+/* Tipos */
 %token T_NUMBER_TYPE T_STRING_TYPE T_BOOLEAN_TYPE T_DATE_TYPE T_TIME_TYPE T_DATETIME_TYPE
 
-/* Símbolos e Literais */
+/* Símbolos */
 %token T_LBRACE T_RBRACE T_LPAREN T_RPAREN T_LBRACK T_RBRACK
 %token T_DOTDOT T_DIAMOND_ARROW T_ARROW_DIAMOND T_ASTERISK T_AT T_DOT T_COLON T_COMMA
 %token <sval> T_CLASS_NAME T_RELATION_NAME T_INSTANCE_NAME T_NEW_DATA_TYPE
 %token <ival> T_NUMBER_LITERAL
 
-/* Definição de precedência para resolver conflitos simples */
 %left T_COMMA
 
 %%
 
-/* --- Gramática (Regras de Produção) --- */
+/* Gramática */
 
 program:
     declarations
@@ -85,10 +82,15 @@ declarations:
 
 declaration:
     package_decl
+    | import_decl
     | element
     ;
 
-/* 1. Declaração de Pacotes */
+import_decl:
+    T_IMPORT T_CLASS_NAME
+    | T_IMPORT T_RELATION_NAME /* caso seja minúsculo */
+    ;
+
 package_decl:
     T_PACKAGE T_CLASS_NAME { 
         current_package = $2; 
@@ -98,7 +100,7 @@ package_decl:
 
 opt_body:
     T_LBRACE element_list T_RBRACE
-    | /* vazio - permite pacote sem corpo explícito imediato */
+    | /* vazio - permite pacote sem corpo */
     ;
 
 element_list:
@@ -115,9 +117,9 @@ element:
     | simple_type_decl
     ;
 
-/* 2. Declaração de Classes */
+/* --- Classes --- */
 class_decl:
-    class_stereotype T_CLASS_NAME { register_class($2); } opt_specialization opt_class_body
+    class_stereotype T_CLASS_NAME opt_classification { register_class($2); } opt_specialization opt_class_body
     ;
 
 class_stereotype:
@@ -126,9 +128,23 @@ class_stereotype:
     | T_INTRINSICMODE | T_EXTRINSICMODE | T_HISTORICALROLE | T_HISTORICALROLEMIXIN
     ;
 
+/* Suporte a "of functional-complexes" */
+opt_classification:
+    T_OF T_FUNCTIONAL_COMPLEXES
+    | T_OF T_RELATORS
+    | T_OF T_INTRINSIC_MODES
+    | T_OF T_EXTRINSIC_MODES
+    | T_OF T_QUALITIES
+    | T_OF T_MODES
+    | T_OF T_EVENTS
+    | T_OF T_SITUATIONS
+    | /* vazio */
+    ;
+
 opt_specialization:
     /* vazio */
     | T_RELATION_NAME T_CLASS_NAME /* Ex: specializes Person */
+    | T_RELATION_NAME T_CLASS_NAME T_COMMA T_CLASS_NAME /* Ex: specializes A, B */
     ;
 
 opt_class_body:
@@ -142,11 +158,10 @@ class_members:
     | class_members internal_relation
     ;
 
-/* Atributos: name: type */
 attribute:
     T_RELATION_NAME T_COLON type_specifier opt_constraints
-    | T_RELATION_NAME T_CLASS_NAME /* Ex: eyeColor EyeColor (sintaxe alternativa) */
     | T_RELATION_NAME T_COLON T_CLASS_NAME opt_constraints
+    | T_RELATION_NAME T_CLASS_NAME
     ;
 
 type_specifier:
@@ -156,19 +171,18 @@ type_specifier:
 
 opt_constraints:
     /* vazio */
-    | T_LBRACE T_RELATION_NAME T_RBRACE /* Ex: {const} */
+    | T_LBRACE T_RELATION_NAME T_RBRACE
     ;
 
-/* 3. Tipos de Dados */
+/* --- Outros --- */
 datatype_decl:
     T_DATATYPE T_CLASS_NAME opt_class_body { count_datatypes++; }
     ;
 
 simple_type_decl:
-    T_NEW_DATA_TYPE { count_datatypes++; } /* Ex: CarDataType solto no arquivo */
+    T_NEW_DATA_TYPE { count_datatypes++; }
     ;
 
-/* 4. Classes Enumeradas */
 enum_decl:
     T_ENUM T_CLASS_NAME T_LBRACE enum_list T_RBRACE { count_enums++; register_class($2); }
     ;
@@ -176,12 +190,14 @@ enum_decl:
 enum_list:
     T_CLASS_NAME
     | enum_list T_COMMA T_CLASS_NAME
+    | /* vazio */
     ;
 
-/* 5. Generalizações (Gensets) */
+/* --- Genset --- */
+/* Correção: Permitir modificadores tanto na versão 'where' quanto na com chaves */
 genset_decl:
     genset_modifiers T_GENSET T_CLASS_NAME T_WHERE genset_details { count_gensets++; }
-    | T_GENSET T_CLASS_NAME T_LBRACE T_GENERAL T_CLASS_NAME T_SPECIFICS class_list T_RBRACE { count_gensets++; }
+    | genset_modifiers T_GENSET T_CLASS_NAME T_LBRACE T_GENERAL T_CLASS_NAME T_SPECIFICS class_list T_RBRACE { count_gensets++; }
     ;
 
 genset_modifiers:
@@ -193,7 +209,7 @@ genset_modifiers:
     ;
 
 genset_details:
-    class_list T_RELATION_NAME T_CLASS_NAME /* Ex: Child, Adult specializes Person */
+    class_list T_RELATION_NAME T_CLASS_NAME
     ;
 
 class_list:
@@ -201,12 +217,43 @@ class_list:
     | class_list T_COMMA T_CLASS_NAME
     ;
 
-/* 6. Relações */
+/* --- Relações --- */
+relation_decl:
+    /* Relação Externa Explícita (@mediation relation ...) */
+    T_AT relation_stereotype T_RELATION T_CLASS_NAME relation_body_opt {
+        register_external_relation($4);
+    }
+    /* Relator com ou sem corpo (relator Name ...) */
+    | T_RELATION T_CLASS_NAME opt_relator_body {
+        register_external_relation($2);
+    }
+    /* Relação implícita por nome (hasMember ...) */
+    | T_RELATION_NAME T_CLASS_NAME T_LBRACE internal_relation_list T_RBRACE 
+    ;
 
-/* Relação Interna (dentro de uma classe) */
+opt_relator_body:
+    T_LBRACE internal_relation_list T_RBRACE
+    | /* vazio - permite 'relator Medical_Report' sem chaves */
+    ;
+
+relation_body_opt:
+    cardinality cardinality T_CLASS_NAME 
+    | T_LBRACE class_members T_RBRACE 
+    | /* vazio */
+    ;
+
+internal_relation_list:
+    internal_relation
+    | internal_relation_list internal_relation
+    ;
+
 internal_relation:
-    relation_meta relation_connector cardinality T_CLASS_NAME 
-    /* Ex: @componentOf [1] <>-- [1..*] Department (simplificado) */
+    /* Padrão 1: @stereotype [1] <>-- [1..*] Class */
+    relation_meta cardinality relation_arrow cardinality T_CLASS_NAME
+    /* Padrão 2: @stereotype -- name -- [1] Class */
+    | relation_meta T_DOTDOT T_RELATION_NAME T_DOTDOT cardinality T_CLASS_NAME
+    /* Padrão 3: apenas nome */
+    | T_RELATION_NAME
     ;
 
 relation_meta:
@@ -215,49 +262,28 @@ relation_meta:
     ;
 
 relation_stereotype:
-    T_MEDIATION | T_COMPONENTOF | T_MEMBEROF | T_CHARACTERIZATION | T_FORMAL | T_MATERIAL | T_DERIVATION | T_RELATION
-    /* Adicione outros se necessário */
+    T_MEDIATION | T_COMPONENTOF | T_MEMBEROF | T_CHARACTERIZATION | T_FORMAL | T_MATERIAL 
+    | T_DERIVATION | T_RELATION | T_BRINGSABOUT | T_TRIGGERS | T_PARTICIPATION | T_PARTICIPATIONAL
+    | T_HISTORICALDEPENDENCE | T_CREATION | T_MANIFESTATION | T_TERMINATION | T_INSTANTIATION
     ;
 
-relation_connector:
-    cardinality T_DIAMOND_ARROW cardinality /* [1] <>-- [1..*] */
-    | T_ARROW_DIAMOND /* --<> */
-    | T_DOTDOT /* -- */
-    | T_RELATION_NAME /* hasMember */
+relation_arrow:
+    T_DIAMOND_ARROW | T_ARROW_DIAMOND | T_DOTDOT | T_RELATION_NAME
     ;
 
-/* Relação Externa (fora de classe) */
-relation_decl:
-    T_AT relation_stereotype T_RELATION T_CLASS_NAME relation_body_opt {
-        register_external_relation($4);
-    }
-    | T_RELATION_NAME T_CLASS_NAME T_LBRACE internal_relation T_RBRACE /* Relator style */
-    ;
-
-relation_body_opt:
-    /* Aceita estruturas variadas de relação externa */
-    cardinality cardinality T_CLASS_NAME /* [1..*] [1] Employee */
-    | T_LBRACE class_members T_RBRACE /* Corpo completo estilo relator */
-    | /* vazio */
-    ;
-
-/* Cardinalidade: [1], [0..1], [1..*] */
 cardinality:
     T_LBRACK T_NUMBER_LITERAL T_RBRACK
     | T_LBRACK T_NUMBER_LITERAL T_DOTDOT T_NUMBER_LITERAL T_RBRACK
     | T_LBRACK T_NUMBER_LITERAL T_DOTDOT T_ASTERISK T_RBRACK
-    | /* vazio (opcional) */
+    | /* vazio */
     ;
 
 %%
-
-/* --- Código C++ Auxiliar --- */
 
 void yyerror(const char *s) {
     cerr << "ERRO SINTÁTICO: " << s << " na linha " << yylineno << " próximo ao token '" << yytext << "'" << endl;
 }
 
-// Função chamada pelo main para imprimir a tabela
 void print_synthesis_table() {
     cout << "\n======================================================\n";
     cout << "              TABELA DE SÍNTESE (SINTÁTICA)           \n";
@@ -281,7 +307,7 @@ void print_synthesis_table() {
     }
 
     cout << "\nOUTROS CONSTRUTOS:\n";
-    cout << "  - Relações Externas Declaradas: " << external_relations.size() << "\n";
+    cout << "  - Relações Externas: " << external_relations.size() << "\n";
     for(const auto& rel : external_relations) cout << "    * " << rel << "\n";
     
     cout << "  - Declarações de Tipos (Datatypes): " << count_datatypes << "\n";
