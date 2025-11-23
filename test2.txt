@@ -1,0 +1,50 @@
+package UniversityModel
+
+import AcademicSystemBase
+
+StudentIdDataType
+CourseCodeDataType
+
+kind Person
+kind University
+
+subkind Student specializes Person
+subkind Professor specializes Person
+phase PostDoc specializes Professor
+
+category AcademicStaff
+mixin Researcher mixes AcademicStaff
+
+relator Enrollment {
+    @characterization
+    -- student -- [1] Student { @ordered }
+
+    @mediation
+    -- course -- [1..*] Course { @subsets enrolledCourses }
+}
+
+relator Employment {
+    @material
+    -- employee -- [1] AcademicStaff { @readOnly }
+
+    @mediation
+    -- employer -- [1] University
+}
+
+kind Course {
+    code: CourseCodeDataType { @const }
+    name: string
+    credits: number { @derived }
+    startDate: date
+    isActive: boolean
+    enrollmentCap: ..* 
+}
+
+instance comp_sci101 : Course
+
+genset DepartmentAffiliation {
+    general UniversityMember
+    specifics Student, Professor
+    @disjoint @complete
+}
+

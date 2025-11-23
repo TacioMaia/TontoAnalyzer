@@ -1,153 +1,125 @@
 %{
-/* Reconhecedor de uma linguagem simplificada */
 #include <iostream>
-#include "tokens.h"
-using std::cout;
+#include <string>
+#include <cstring> // Para strdup
+#include "parser.tab.h" // Tokens gerados pelo Bison
 
-/* Variaveis globais para linha e coluna */
-extern int yylineno;
-int column = 1;
-
-/* Função que atualiza a coluna */
-void update_column(yyFlexLexer& scanner) {
-    column += scanner.YYLeng();
-}
+using namespace std;
 %}
 
 %option yylineno
 %option noyywrap
-%option c++
 
-
-/* Definições Regulares */
+/* --- Definições Regulares --- */
 letra_maiuscula [A-Z] 
-letras	[A-Za-z] 
-digito	[0-9]
-num	    {digito}+(\.{digito}+)?(E[+-]?{digito}+)?
-/*string	{letras}({letras}|{digito})*  */
+letras      [A-Za-z] 
+digito      [0-9]
+num         {digito}+
 
-/* Nome da Classe */
-className {letra_maiuscula}({letras}|_)*{letras}
+/* Identificadores */
+/* Classe começa com maiúscula */
+className {letra_maiuscula}({letras}|_|{digito})*{letras}?
 
-/* Nome da Relação */
-relationName [a-z]([A-Za-z_])*[A-Za-z]
+/* RelationName começa com minúscula */
+relationName [a-z]([A-Za-z0-9_])*
 
-/* Nome da Instancia */
-instanceName {letras}(({letras})|_)*{digito}+
+/* Novos Tipos terminam com DataType */
+newType {letra_maiuscula}({letras}|{digito})*DataType
 
-
-/* Nome Novos Tipos */
-newType {letras}+DataType
-
-/* Regras de Tradução */
-%%
-[ \t]+          { update_column(*this);}
-\n              { column = 1;}
-
-"package"       { update_column(*this); return T_PACKAGE; }
-"import"        { update_column(*this); return T_IMPORT; }
-"genset"        { update_column(*this); return T_GENSET; }
-"disjoint"      { update_column(*this); return T_DISJOINT; }
-"complete"      { update_column(*this); return T_COMPLETE; }
-"general"       { update_column(*this); return T_GENERAL; }
-"specifics"     { update_column(*this); return T_SPECIFICS; }
-"where"         { update_column(*this); return T_WHERE; }
-"functional-complexes" {update_column(*this); return T_FUNCTIONAL_COMPLEXES; }
-
-
-"event"               { update_column(*this); return T_EVENT; }
-"situation"           { update_column(*this); return T_SITUATION; }
-"process"             { update_column(*this); return T_PROCESS; }
-"category"            { update_column(*this); return T_CATEGORY; }
-"mixin"               { update_column(*this); return T_MIXIN; }
-"phaseMixin"          { update_column(*this); return T_PHASEMIXIN; }
-"roleMixin"           { update_column(*this); return T_ROLEMIXIN; }
-"historicalRoleMixin" { update_column(*this); return T_HISTORICALROLEMIXIN; }
-"kind"                { update_column(*this); return T_KIND; }
-"collective"          { update_column(*this); return T_COLLECTIVE; }
-"quantity"            { update_column(*this); return T_QUANTITY; }
-"quality"             { update_column(*this); return T_QUALITY; }
-"mode"                { update_column(*this); return T_MODE; }
-"intrisicMode"        { update_column(*this); return T_INTRINSICMODE; }
-"extrinsicMode"       { update_column(*this); return T_EXTRINSICMODE; }
-"subkind"             { update_column(*this); return T_SUBKIND; }
-"phase"               { update_column(*this); return T_PHASE; }
-"role"                { update_column(*this); return T_ROLE; }
-"historical Role"     { update_column(*this); return T_HISTORICALROLE; }
-
-
-"material"              { update_column(*this); return T_MATERIAL; }
-"derivation"            { update_column(*this); return T_DERIVATION; }
-"comparative"           { update_column(*this); return T_COMPARATIVE; }
-"mediation"             { update_column(*this); return T_MEDIATION; }
-"characterization"      { update_column(*this); return T_CHARACTERIZATION; }
-"subCollectionOf"       { update_column(*this); return T_SUBCOLLECTIONOF; }
-"subQualityof"          { update_column(*this); return T_SUBQUALITYOF; }
-"instantiation"         { update_column(*this); return T_INSTANTIATION; }
-"externalDependence"    { update_column(*this); return T_EXTERNALDEPENDENCE; }
-"componentof"           { update_column(*this); return T_COMPONENTOF; }
-"memberof"              { update_column(*this); return T_MEMBEROF; }
-"termination"           { update_column(*this); return T_TERMINATION; }
-"participational"       { update_column(*this); return T_PARTICIPATIONAL; }
-"participation"         { update_column(*this); return T_PARTICIPATION; }
-"historical Dependence" { update_column(*this); return T_HISTORICALDEPENDENCE; }
-"creation"              { update_column(*this); return T_CREATION; }
-"manifestation"         { update_column(*this); return T_MANIFESTATION; }
-"bringsAbout"           { update_column(*this); return T_BRINGSABOUT; }
-"triggers"              { update_column(*this); return T_TRIGGERS; }
-"composition"           { update_column(*this); return T_COMPOSITION; }
-"aggregation"           { update_column(*this); return T_AGGREGATION; }
-"inherence"             { update_column(*this); return T_INHERENCE; }
-"value"                 { update_column(*this); return T_VALUE; }
-"formal"                { update_column(*this); return T_FORMAL; }
-"constitution"          { update_column(*this); return T_CONSTITUTION; }
-
-
-"number"    { update_column(*this); return T_NUMBER_TYPE; }
-"string"    { update_column(*this); return T_STRING_TYPE; }
-"boolean"   { update_column(*this); return T_BOOLEAN_TYPE; }
-"date"      { update_column(*this); return T_DATE_TYPE; }
-"time"      { update_column(*this); return T_TIME_TYPE; }
-"datetime"  { update_column(*this); return T_DATETIME_TYPE; }
-
-
-"ordered"   { update_column(*this); return T_ORDERED; }
-"const"     { update_column(*this); return T_CONST; }
-"derived"   { update_column(*this); return T_DERIVED; }
-"subsets"   { update_column(*this); return T_SUBSETS; }
-"redefines" { update_column(*this); return T_REDEFINES; }
-
-
-"{"             { update_column(*this); return T_LBRACE; }
-"}"             { update_column(*this); return T_RBRACE; }
-"("             { update_column(*this); return T_LPAREN; }
-")"             { update_column(*this); return T_RPAREN; }
-"["             { update_column(*this); return T_LBRACK; }
-"]"             { update_column(*this); return T_RBRACK; }
-".."            { update_column(*this); return T_DOTDOT; }
-"<>--"          { update_column(*this); return T_DIAMOND_ARROW; }
-"--<>"          { update_column(*this); return T_ARROW_DIAMOND; }
-"*"             { update_column(*this); return T_ASTERISK; }
-"@"             { update_column(*this); return T_AT; }
-"."             { update_column(*this); return T_DOT; }
-
-
-{newType}       { update_column(*this); return T_NEW_DATA_TYPE; }
-{className}     { update_column(*this); return T_CLASS_NAME; }
-{relationName}  { update_column(*this); return T_RELATION_NAME; }
-{instanceName}  { update_column(*this); return T_INSTANCE_NAME; }
-{num}           { update_column(*this); return T_NUMBER; }
-
-
-.               {
-                    // Imprime a mensagem de erro 
-                    cout << "Erro na linha " << yylineno << ", coluna " << column
-                         << ": Token inválido '" << YYText() << "'\n";
-                    // Sugestão de tratamento
-                    cout << "  Sugestão: Verifique se o caractere é permitido pela linguagem TONTO ou se há erro na formação de um nome (ex: classe iniciando com minúscula, violação de convenção de nome, caractere especial inesperado).\n";
-                    update_column(*this); 
-                    return T_INVALID; 
-                }
 %%
 
-/* nenhuma função auxiliar é necessária */
+[ \t\r]+        ; /* Ignora espaços em branco */
+\n              ; /* O yylineno conta as linhas automaticamente */
+"//".* ; /* Ignora comentários de uma linha */
+
+"package"       { return T_PACKAGE; }
+"import"        { return T_IMPORT; }
+"genset"        { return T_GENSET; }
+"disjoint"      { return T_DISJOINT; }
+"complete"      { return T_COMPLETE; }
+"general"       { return T_GENERAL; }
+"specifics"     { return T_SPECIFICS; }
+"where"         { return T_WHERE; }
+"functional-complexes" { return T_FUNCTIONAL_COMPLEXES; }
+
+"datatype"      { return T_DATATYPE; }
+"enum"          { return T_ENUM; }
+"relation"      { return T_RELATION; }
+"relator"       { return T_RELATION; } 
+
+
+"kind"          { return T_KIND; }
+"subkind"       { return T_SUBKIND; }
+"role"          { return T_ROLE; }
+"phase"         { return T_PHASE; }
+"category"      { return T_CATEGORY; }
+"mixin"         { return T_MIXIN; }
+"roleMixin"     { return T_ROLEMIXIN; }
+"phaseMixin"    { return T_PHASEMIXIN; }
+"collective"    { return T_COLLECTIVE; }
+"quantity"      { return T_QUANTITY; }
+"quality"       { return T_QUALITY; }
+"mode"          { return T_MODE; }
+"event"         { return T_EVENT; }
+"situation"     { return T_SITUATION; }
+"process"       { return T_PROCESS; }
+
+
+"material"      { return T_MATERIAL; }
+"mediation"     { return T_MEDIATION; }
+"componentOf"   { return T_COMPONENTOF; }
+"memberOf"      { return T_MEMBEROF; }
+"derivation"    { return T_DERIVATION; }
+"characterization" { return T_CHARACTERIZATION; }
+"formal"        { return T_FORMAL; }
+
+
+"number"        { return T_NUMBER_TYPE; }
+"string"        { return T_STRING_TYPE; }
+"boolean"       { return T_BOOLEAN_TYPE; }
+"date"          { return T_DATE_TYPE; }
+"int"           { return T_NUMBER_TYPE; } 
+
+
+"{"             { return T_LBRACE; }
+"}"             { return T_RBRACE; }
+"("             { return T_LPAREN; }
+")"             { return T_RPAREN; }
+"["             { return T_LBRACK; }
+"]"             { return T_RBRACK; }
+".."            { return T_DOTDOT; }
+":"             { return T_COLON; }
+","             { return T_COMMA; }
+"@"             { return T_AT; }
+"*"             { return T_ASTERISK; }
+"<>"            { return T_DIAMOND_ARROW; } 
+"<>--"          { return T_DIAMOND_ARROW; }
+"--<>"          { return T_ARROW_DIAMOND; }
+"--"            { return T_DOTDOT; } 
+
+{newType}       { 
+    yylval.sval = strdup(yytext); 
+    return T_NEW_DATA_TYPE; 
+}
+
+{className}     { 
+    yylval.sval = strdup(yytext); 
+    return T_CLASS_NAME; 
+}
+
+{relationName}  { 
+    yylval.sval = strdup(yytext); 
+    return T_RELATION_NAME; 
+}
+
+{num}           { 
+    yylval.ival = atoi(yytext);
+    return T_NUMBER_LITERAL; 
+}
+
+.               { 
+    /* Apenas avisa no erro léxico, não para a execução imediatamente */
+    cerr << "ERRO LÉXICO: Caractere inválido '" << yytext << "' na linha " << yylineno << endl;
+}
+
+%%

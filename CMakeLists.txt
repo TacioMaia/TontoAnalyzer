@@ -1,16 +1,31 @@
-cmake_minimum_required(VERSION 3.0.0)
-project(Sample)
+cmake_minimum_required(VERSION 3.10)
+project(TontoAnalyzer)
 
-# Configuração do C++
-set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_STANDARD 17)
-set(SOURCES parser.cpp sample.cpp)
 
-# Configuração do Flex
-find_package(FLEX)
-FLEX_TARGET(Lexer lexer.l ${CMAKE_CURRENT_BINARY_DIR}/lex.yy.cc COMPILE_FLAGS "-+")
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-include_directories(${CMAKE_SOURCE_DIR})
+# 1. Encontrar pacotes Flex e Bison
+find_package(BISON REQUIRED)
+find_package(FLEX REQUIRED)
 
-# Executável depende também da saída do Flex
-add_executable(sample ${SOURCES} ${FLEX_Lexer_OUTPUTS})
+# 2. Configurar o Parser (Bison)
+# Gera parser.tab.cpp e parser.tab.h
+BISON_TARGET(MyParser parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.cpp
+             DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.h)
+
+# 3. Configurar o Scanner (Flex)
+# --- MUDANÇA AQUI: Mudamos de lex.yy.c para lex.yy.cpp ---
+FLEX_TARGET(MyScanner lexer.l ${CMAKE_CURRENT_BINARY_DIR}/lex.yy.cpp)
+
+# 4. Definir Dependência
+# O scanner precisa do header gerado pelo parser
+ADD_FLEX_BISON_DEPENDENCY(MyScanner MyParser)
+
+# 5. Incluir diretórios de build
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR})
+
+# 6. Criar o executável
+add_executable(tonto_parser
+    ${BISON_MyParser_OUTPUTS}
+    ${FLEX_MyScanner_OUTPUTS}
+    main.cpp
+)

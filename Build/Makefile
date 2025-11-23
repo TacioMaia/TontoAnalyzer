@@ -117,89 +117,89 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named sample
+# Target rules for targets named tonto_parser
 
 # Build rule for target.
-sample: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sample
-.PHONY : sample
+tonto_parser: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tonto_parser
+.PHONY : tonto_parser
 
 # fast build rule for target.
-sample/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sample.dir/build.make CMakeFiles/sample.dir/build
-.PHONY : sample/fast
+tonto_parser/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tonto_parser.dir/build.make CMakeFiles/tonto_parser.dir/build
+.PHONY : tonto_parser/fast
 
-lex.yy.o: lex.yy.cc.o
+lex.yy.o: lex.yy.cpp.o
 .PHONY : lex.yy.o
 
 # target to build an object file
-lex.yy.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sample.dir/build.make CMakeFiles/sample.dir/lex.yy.cc.o
-.PHONY : lex.yy.cc.o
+lex.yy.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tonto_parser.dir/build.make CMakeFiles/tonto_parser.dir/lex.yy.cpp.o
+.PHONY : lex.yy.cpp.o
 
-lex.yy.i: lex.yy.cc.i
+lex.yy.i: lex.yy.cpp.i
 .PHONY : lex.yy.i
 
 # target to preprocess a source file
-lex.yy.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sample.dir/build.make CMakeFiles/sample.dir/lex.yy.cc.i
-.PHONY : lex.yy.cc.i
+lex.yy.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tonto_parser.dir/build.make CMakeFiles/tonto_parser.dir/lex.yy.cpp.i
+.PHONY : lex.yy.cpp.i
 
-lex.yy.s: lex.yy.cc.s
+lex.yy.s: lex.yy.cpp.s
 .PHONY : lex.yy.s
 
 # target to generate assembly for a file
-lex.yy.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sample.dir/build.make CMakeFiles/sample.dir/lex.yy.cc.s
-.PHONY : lex.yy.cc.s
+lex.yy.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tonto_parser.dir/build.make CMakeFiles/tonto_parser.dir/lex.yy.cpp.s
+.PHONY : lex.yy.cpp.s
 
-parser.o: parser.cpp.o
-.PHONY : parser.o
-
-# target to build an object file
-parser.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sample.dir/build.make CMakeFiles/sample.dir/parser.cpp.o
-.PHONY : parser.cpp.o
-
-parser.i: parser.cpp.i
-.PHONY : parser.i
-
-# target to preprocess a source file
-parser.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sample.dir/build.make CMakeFiles/sample.dir/parser.cpp.i
-.PHONY : parser.cpp.i
-
-parser.s: parser.cpp.s
-.PHONY : parser.s
-
-# target to generate assembly for a file
-parser.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sample.dir/build.make CMakeFiles/sample.dir/parser.cpp.s
-.PHONY : parser.cpp.s
-
-sample.o: sample.cpp.o
-.PHONY : sample.o
+main.o: main.cpp.o
+.PHONY : main.o
 
 # target to build an object file
-sample.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sample.dir/build.make CMakeFiles/sample.dir/sample.cpp.o
-.PHONY : sample.cpp.o
+main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tonto_parser.dir/build.make CMakeFiles/tonto_parser.dir/main.cpp.o
+.PHONY : main.cpp.o
 
-sample.i: sample.cpp.i
-.PHONY : sample.i
+main.i: main.cpp.i
+.PHONY : main.i
 
 # target to preprocess a source file
-sample.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sample.dir/build.make CMakeFiles/sample.dir/sample.cpp.i
-.PHONY : sample.cpp.i
+main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tonto_parser.dir/build.make CMakeFiles/tonto_parser.dir/main.cpp.i
+.PHONY : main.cpp.i
 
-sample.s: sample.cpp.s
-.PHONY : sample.s
+main.s: main.cpp.s
+.PHONY : main.s
 
 # target to generate assembly for a file
-sample.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sample.dir/build.make CMakeFiles/sample.dir/sample.cpp.s
-.PHONY : sample.cpp.s
+main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tonto_parser.dir/build.make CMakeFiles/tonto_parser.dir/main.cpp.s
+.PHONY : main.cpp.s
+
+parser.tab.o: parser.tab.cpp.o
+.PHONY : parser.tab.o
+
+# target to build an object file
+parser.tab.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tonto_parser.dir/build.make CMakeFiles/tonto_parser.dir/parser.tab.cpp.o
+.PHONY : parser.tab.cpp.o
+
+parser.tab.i: parser.tab.cpp.i
+.PHONY : parser.tab.i
+
+# target to preprocess a source file
+parser.tab.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tonto_parser.dir/build.make CMakeFiles/tonto_parser.dir/parser.tab.cpp.i
+.PHONY : parser.tab.cpp.i
+
+parser.tab.s: parser.tab.cpp.s
+.PHONY : parser.tab.s
+
+# target to generate assembly for a file
+parser.tab.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tonto_parser.dir/build.make CMakeFiles/tonto_parser.dir/parser.tab.cpp.s
+.PHONY : parser.tab.cpp.s
 
 # Help Target
 help:
@@ -209,16 +209,16 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... sample"
+	@echo "... tonto_parser"
 	@echo "... lex.yy.o"
 	@echo "... lex.yy.i"
 	@echo "... lex.yy.s"
-	@echo "... parser.o"
-	@echo "... parser.i"
-	@echo "... parser.s"
-	@echo "... sample.o"
-	@echo "... sample.i"
-	@echo "... sample.s"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
+	@echo "... parser.tab.o"
+	@echo "... parser.tab.i"
+	@echo "... parser.tab.s"
 .PHONY : help
 
 

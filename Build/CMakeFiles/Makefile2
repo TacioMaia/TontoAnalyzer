@@ -63,7 +63,7 @@ CMAKE_BINARY_DIR = /home/tacioplays/Compiladores/TontoAnalyzer/Build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/sample.dir/all
+all: CMakeFiles/tonto_parser.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -71,34 +71,34 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/sample.dir/clean
+clean: CMakeFiles/tonto_parser.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/sample.dir
+# Target rules for target CMakeFiles/tonto_parser.dir
 
 # All Build rule for target.
-CMakeFiles/sample.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sample.dir/build.make CMakeFiles/sample.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sample.dir/build.make CMakeFiles/sample.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/tacioplays/Compiladores/TontoAnalyzer/Build/CMakeFiles --progress-num=1,2,3,4,5 "Built target sample"
-.PHONY : CMakeFiles/sample.dir/all
+CMakeFiles/tonto_parser.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tonto_parser.dir/build.make CMakeFiles/tonto_parser.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tonto_parser.dir/build.make CMakeFiles/tonto_parser.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/tacioplays/Compiladores/TontoAnalyzer/Build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target tonto_parser"
+.PHONY : CMakeFiles/tonto_parser.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/sample.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/tacioplays/Compiladores/TontoAnalyzer/Build/CMakeFiles 5
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/sample.dir/all
+CMakeFiles/tonto_parser.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/tacioplays/Compiladores/TontoAnalyzer/Build/CMakeFiles 6
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/tonto_parser.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/tacioplays/Compiladores/TontoAnalyzer/Build/CMakeFiles 0
-.PHONY : CMakeFiles/sample.dir/rule
+.PHONY : CMakeFiles/tonto_parser.dir/rule
 
 # Convenience name for target.
-sample: CMakeFiles/sample.dir/rule
-.PHONY : sample
+tonto_parser: CMakeFiles/tonto_parser.dir/rule
+.PHONY : tonto_parser
 
 # clean rule for target.
-CMakeFiles/sample.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sample.dir/build.make CMakeFiles/sample.dir/clean
-.PHONY : CMakeFiles/sample.dir/clean
+CMakeFiles/tonto_parser.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tonto_parser.dir/build.make CMakeFiles/tonto_parser.dir/clean
+.PHONY : CMakeFiles/tonto_parser.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

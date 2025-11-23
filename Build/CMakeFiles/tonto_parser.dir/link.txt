@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/tonto_parser.dir/parser.tab.cpp.o CMakeFiles/tonto_parser.dir/lex.yy.cpp.o CMakeFiles/tonto_parser.dir/main.cpp.o -o tonto_parser 
