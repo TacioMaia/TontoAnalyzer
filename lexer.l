@@ -16,7 +16,7 @@ letras      [A-Za-z]
 digito      [0-9]
 num         {digito}+
 
-/* Identificadores */ 
+/* Identificadores */
 className {letra_maiuscula}({letras}|_|{digito})*{letras}?
 relationName [a-z]([A-Za-z0-9_])*
 newType {letra_maiuscula}({letras}|{digito})*DataType

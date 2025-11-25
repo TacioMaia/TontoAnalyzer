@@ -1,15 +1,28 @@
-package CarOwnership 
+package MyPackage
 
-kind Organization
-subkind CarAgency specializes Organization
-kind Car
-CarDataType
-
-relator CarOwnership {
-    @mediation
-    -- involvesOwner -- [1] CarAgency
-
-    @mediation
-    -- involvesProperty -- [1] Car
+kind Person {
+    name: string
+    birthDate: date {const}
 }
 
+phase Child specializes Person
+
+datatype Address {
+    street: string
+    number: int
+}
+
+enum EyeColor { Blue, Green, Brown, Black }
+
+disjoint complete genset PersonAgeGroup where Child, Adult specializes Person
+
+genset PersonAgeGroup {
+    general Person
+    specifics Child, Adult
+}
+
+kind University {
+    @componentOf [1] <>-- [1..*] Department
+}
+
+@mediation relation EmploymentContract [1..*] -- [1] Employee
