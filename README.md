@@ -1,14 +1,15 @@
-# Analisador Léxico para TONTO (Textual Ontology Language)
+# Analisador Sintático para TONTO (Textual Ontology Language)
 
 ## Descrição
 
-Este projeto implementa um analisador léxico para a linguagem TONTO (Textual Ontology Language), conforme especificado na disciplina de Compiladores da UFERSA. O analisador utiliza a ferramenta Flex (na sua variante C++, `flex++`) para reconhecer os tokens da linguagem, incluindo palavras reservadas, estereótipos, símbolos especiais e convenções de nomes para classes, relações, instâncias e tipos de dados.
+Este projeto implementa um analisador Sintático para a linguagem TONTO (Textual Ontology Language), conforme especificado na disciplina de Compiladores da UFERSA. O analisador utiliza a ferramenta Flex (na sua variante C++, `flex++`) para reconhecer os tokens da linguagem, incluindo palavras reservadas, estereótipos, símbolos especiais e convenções de nomes para classes, relações, instâncias e tipos de dados. E também a ferramente Bison, para utilizar os tokens da linguagem para garantir que estejam sendo utilizadas de forma correta na linguagem.
 
 O programa lê um arquivo `.tonto` como entrada e produz duas saídas principais:
-1.  **Visão Analítica:** Uma listagem de todos os tokens válidos reconhecidos, indicando linha, coluna, tipo e o texto do token.
-2.  **Tabela de Síntese:** Uma contagem resumida dos principais elementos léxicos encontrados (classes, relações, palavras-chave, etc.).
+1.  **Relatório de erros:** Uma listagem de todos os erros encontramos juntamente com sugestões de tratamento.
+2.  **Tabela de Síntese:** Resumo dos construtos encontrados, quantos e quais pacotes, quantas classes por pacote, externas, declarações de tipos).
 
 O analisador também realiza tratamento de erros, identificando tokens inválidos e informando sua localização (linha e coluna) com uma sugestão de correção.
+Tratamento de erro para sintaxe incorreta de classes e pacotes.
 
 ## Pré-requisitos
 
@@ -16,6 +17,7 @@ Para compilar e executar este projeto, você precisará ter os seguintes softwar
 
 * **CMake:** (Versão 3.0 ou superior) - Gerenciador de compilação.
 * **Flex:** (Versão `flex++` ou Flex configurado para C++) - Gerador de analisador léxico.
+* **Bison:** (Versão mais recente, 3.0 ou superior) - Gerador de analisador sintático.
 * **Compilador C++:** (Compatível com C++17, como g++) - Para compilar o código gerado e o parser.
 * **Make:** (ou outra ferramenta de build compatível com o gerador do CMake, como Ninja) - Para executar os comandos de compilação definidos pelo CMake.
 
@@ -44,16 +46,16 @@ Siga estes passos para compilar o projeto usando CMake:
     ```bash
     make
     ```
-    Se tudo correr bem, um executável chamado `sample` será criado dentro da pasta `Build`.
+    Se tudo correr bem, um executável chamado `tonto_parser` será criado dentro da pasta `Build`.
 
 ## Como Executar o Analisador
 
 Após a compilação bem-sucedida:
 
 1.  **Permaneça na pasta `Build`**.
-2.  **Execute o programa `sample`**, redirecionando o arquivo `.tonto` desejado para a entrada padrão (`<`). Por exemplo, para analisar o arquivo `test.txt` que está no diretório pai:
+2.  **Execute o programa `tonto_parser`**, redirecionando o arquivo `.tonto` desejado para a entrada padrão (`<`). Por exemplo, para analisar o arquivo `test.txt` que está no diretório pai:
     ```bash
-    ./sample < ../test.txt
+    ./tonto_parser < ../test.txt
     ```
     Substitua `../test.txt` pelo caminho para qualquer outro arquivo `.tonto` que você queira analisar.
 3.  **Observe a Saída:** O programa imprimirá no terminal:
